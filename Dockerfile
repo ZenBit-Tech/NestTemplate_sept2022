@@ -2,10 +2,10 @@ FROM node:18-alpine as dev
 RUN apk --update add nodejs npm
 
 WORKDIR /usr/src/app
-ENV PATH="${PATH}:/usr/local/bin"
+# ENV PATH="${PATH}:/usr/local/bin"
 
 # Will check if we have yarn installed, if not, will install it
-RUN sh -c "if ! command -v yarn &> /dev/null; then echo 'Yarn not found in the container, using npm to install it'; npm i --global yarn; fi"
+# RUN sh -c "if ! command -v yarn &> /dev/null; then echo 'Yarn not found in the container, using npm to install it'; npm i --global yarn; fi"
 COPY package.json ./
 COPY yarn.lock ./
 COPY .npmrc ./
@@ -14,7 +14,7 @@ COPY .npmrc ./
 # RUN yarn --ignore-scripts --dev
 
 # build steps
-
+RUN yarn --ignore-scripts
 # Only install dev dependencies necessary in order to build
 RUN yarn add -D handpick --ignore-scripts
 # Handpick will only pick the dev dependencies because this is a builder
@@ -36,20 +36,20 @@ RUN apk --update add nodejs npm
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /usr/src/app
-ENV PATH="${PATH}:/usr/local/bin"
+# WORKDIR /usr/src/app
+# ENV PATH="${PATH}:/usr/local/bin"
 
 COPY package.json ./
 COPY yarn.lock ./
 COPY .npmrc ./
 
 # Will check if we have yarn installed, if not, will install it
-RUN sh -c "if ! command -v yarn &> /dev/null; then echo 'Yarn not found in the container, using npm to install it'; npm i --global yarn; fi"
-RUN npm i --platform=linuxmusl --arch=x64 sharp
-RUN npm i --omit=dev --flat
-
+#RUN sh -c "if ! command -v yarn &> /dev/null; then echo 'Yarn not found in the container, using npm to install it'; npm i --global yarn; fi"
 # COPY . .
+RUN yarn
+COPY .env ./
 
 COPY --from=dev /usr/src/app/dist ./dist
 
 CMD ["node", "dist/main"]
+
