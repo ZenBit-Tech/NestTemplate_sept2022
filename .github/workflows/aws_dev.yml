@@ -85,3 +85,8 @@ jobs:
           username: ubuntu
           port: 22
           key: ${{ secrets.SSH }}
+          script_stop: true
+          envs: IMAGE_TAG
+          script: |
+            bash /home/ubuntu/deploy_scripts/deploy.sh ${IMAGE_TAG}
+
