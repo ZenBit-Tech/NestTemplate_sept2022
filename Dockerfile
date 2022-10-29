@@ -49,7 +49,7 @@ COPY .npmrc ./
 RUN yarn
 COPY .env ./
 
-# COPY --from=dev /usr/src/app/dist ./dist
+COPY --from=dev /usr/src/app/dist ./dist
 
 CMD ["node", "dist/main"]
 
