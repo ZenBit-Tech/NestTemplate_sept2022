@@ -11,15 +11,15 @@ COPY yarn.lock ./
 COPY .npmrc ./
 # ignore-scripts is used to avoid husky and lint-staged, also to avoid
 # docker postinstall scripts that are used only locally
-# RUN yarn --ignore-scripts --dev
+RUN yarn --ignore-scripts --dev
 
 # build steps
-# RUN yarn --ignore-scripts
+RUN yarn --ignore-scripts
 # Only install dev dependencies necessary in order to build
-# RUN yarn add -D handpick --ignore-scripts
+RUN yarn add -D handpick --ignore-scripts
 # Handpick will only pick the dev dependencies because this is a builder
 # TODO: pass --manager=yarn and make it work with handpick
-# RUN yarn run handpick --target=devDependencies --filter=lintDependencies --filter=testDependencies
+RUN yarn run handpick --target=devDependencies --filter=lintDependencies --filter=testDependencies
 # To install bcrypt, because it's compiled from source
 # Use this as example to install any node-gyp package
 # RUN apk add --update make gcc g++ python2 && \
@@ -28,7 +28,7 @@ COPY .npmrc ./
 
 COPY . .
 
-# RUN yarn --ignore-scripts run build
+RUN yarn --ignore-scripts run build
 
 FROM node:18-alpine as prod
 RUN apk --update add nodejs npm
