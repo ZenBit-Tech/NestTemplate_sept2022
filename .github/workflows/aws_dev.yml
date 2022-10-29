@@ -83,6 +83,5 @@ jobs:
         with:
           host:  ec2-3-76-44-249.eu-central-1.compute.amazonaws.com
           username: ubuntu
-          key: ${{ secrets.SSH }}
           port: 22
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH }}
