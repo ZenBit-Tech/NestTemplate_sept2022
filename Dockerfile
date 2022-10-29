@@ -16,7 +16,7 @@ COPY .npmrc ./
 # build steps
 # RUN yarn --ignore-scripts
 # Only install dev dependencies necessary in order to build
-RUN yarn add -D handpick --ignore-scripts
+# RUN yarn add -D handpick --ignore-scripts
 # Handpick will only pick the dev dependencies because this is a builder
 # TODO: pass --manager=yarn and make it work with handpick
 # RUN yarn run handpick --target=devDependencies --filter=lintDependencies --filter=testDependencies
@@ -49,7 +49,7 @@ COPY .npmrc ./
 RUN yarn
 COPY .env ./
 
-COPY --from=dev /usr/src/app/dist ./dist
+# COPY --from=dev /usr/src/app/dist ./dist
 
 CMD ["node", "dist/main"]
 
