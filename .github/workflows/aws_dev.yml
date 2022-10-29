@@ -82,7 +82,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.4
         with:
           host:  ec2-3-76-44-249.eu-central-1.compute.amazonaws.com
-          username: malik.nuriev95@gmail.com
-          password: Qwe-1995
+          username: ubuntu
+          key: ${{ secrets.SSH }}
           port: 22
           key: ${{ secrets.SSH_PRIVATE_KEY }}
