@@ -90,7 +90,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ec2-44-203-99-255.compute-1.amazonaws.com
+          host: ec2-3-76-44-249.eu-central-1.compute.amazonaws.com
           username: ubuntu
           port: 22
           key: ${{ secrets.SSH_PRIVATE_KEY }}
