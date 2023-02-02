@@ -1,19 +1,19 @@
 version: '3.5'
 
 services:
-  setspace_backend:
-    image: setspace_backend:local
-    container_name: setspace_backend
+  projectname_backend:
+    image: projectname_backend:local
+    container_name: projectname_backend
     restart: unless-stopped
     build:
       context: ..
       dockerfile: devops/Dockerfile
     depends_on:
-      - setspace_database
+      - projectname_database
     links:
-      - setspace_database
+      - projectname_database
     networks:
-      - setspace
+      - projectname
     ports:
       - 127.0.0.1:3000:3000
     environment:
@@ -22,7 +22,7 @@ services:
       FRONTEND_URL: 'http://localhost:4200'
       ADMIN_PANEL_URL: 'http://localhost:4201'
       EXPIRES_IN: '10d'
-      JWT_SECRET: 'SetSpaceSecter'
+      JWT_SECRET: 'projectnameSecter'
       DANGEROUSLY_DISABLE_AUTH_GUARD: 'false'
       SALT_VALUE: 10
       POSTGRES_PORT: 5432
@@ -30,19 +30,19 @@ services:
       POSTGRES_DATABASE: 'postgres'
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: '3i162jcuVIiJLnmFLmr5'
-      POSTGRES_HOST: 'setspace_database'
+      POSTGRES_HOST: 'projectname_database'
       TYPEORM_SYNC: 'true'
       SENDER_MAIL: 'example@gmail.com'
       SENDER_PASSWORD: 'exojwoarozdyvasy'
-      MAIL_HOST: 'mail.setspace.com'
+      MAIL_HOST: 'mail.projectname.com'
       MAIL_PORT: 465
       AWS_ACCESS_KEY_ID: ''
       AWS_SECRET_ACCESS_KEY: ''
       AWS_PUBLIC_BUCKET_NAME: ''
 
-  setspace_database:
+  projectname_database:
     image: postgres:latest
-    container_name: setspace_database
+    container_name: projectname_database
     restart: unless-stopped
     volumes:
       - database:/var/lib/postgresql
@@ -52,7 +52,7 @@ services:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: '3i162jcuVIiJLnmFLmr5'
     networks:
-      - setspace
+      - projectname
     ports:
       - 127.0.0.1:5432:5432
       
@@ -63,16 +63,16 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ${HOME}/docker-storage/setspace/database
+      device: ${HOME}/docker-storage/projectname/database
   database-data:
     driver: local
     external: false
     driver_opts:
       o: bind
       type: none
-      device: ${HOME}/docker-storage/setspace/database-data
+      device: ${HOME}/docker-storage/projectname/database-data
 
 networks:
-  setspace:
-    name: setspace
+  projectname:
+    name: projectname
     external: false

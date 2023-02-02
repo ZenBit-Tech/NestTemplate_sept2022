@@ -9,8 +9,8 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('SetSpace')
-    .setDescription('SetSpace Routes Documentation')
+    .setTitle('projectname')
+    .setDescription('projectname Routes Documentation')
     .setVersion('1.0')
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
     .addSecurityRequirements('bearer')

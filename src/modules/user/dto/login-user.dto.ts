@@ -8,7 +8,7 @@ export class EmailDto {
   @ApiProperty({
     description:
       'The email address of the user, has 3 to 320 characters according to RFC 3696',
-    example: 'admin@mail.setspace',
+    example: 'admin@mail.projectname',
   })
   email: string;
 }
