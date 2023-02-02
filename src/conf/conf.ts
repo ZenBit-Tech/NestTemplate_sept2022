@@ -29,7 +29,6 @@ const config: config_fn = (configService, overrideHost) => {
         ? ['src/**/*.entity{.js,.ts}']
         : ['dist/**/*.entity{.ts,.js}'],
     migrations: ['dist/migrations/*{.ts,.js}'],
-
     synchronize: configServices.get<string>('TYPEORM_SYNC') === 'true',
     logging: configServices.get<string>('TYPEORM_LOGGING') === 'true',
     migrationsRun: configServices.get<string>('RUN_MIGRATIONS') === 'true',

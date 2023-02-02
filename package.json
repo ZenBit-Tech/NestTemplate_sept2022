@@ -1,5 +1,5 @@
 {
-  "name": "wehost_back",
+  "name": "setspace_back",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -14,7 +14,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "start:production": "yarn start:prod",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.{ts,js,json,yalm,yml}",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.{ts,js,json,yalm,yml}\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.{ts,js,json,yalm,yml}\" --fix",
     "upgrade:all": "yarn-upgrade-all",
     "__scripts_for_jest__": "",
@@ -44,8 +44,12 @@
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/platform-socket.io": "^9.2.0",
+    "@nestjs/serve-static": "^3.0.0",
     "@nestjs/swagger": "^6.1.2",
     "@nestjs/typeorm": "^9.0.1",
+    "@nestjs/websockets": "^9.2.0",
+    "aws-sdk": "^2.1240.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -53,6 +57,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "pg": "^8.8.0",
+    "pg-mem": "^2.6.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
@@ -63,11 +68,15 @@
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
+    "@types/aws-sdk": "^2.7.0",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "28.1.4",
+    "@types/multer": "^1.4.7",
     "@types/node": "^16.0.0",
+    "@types/nodemailer": "^6.4.6",
     "@types/passport-jwt": "^3.0.7",
+    "@types/socket.io": "^3.0.2",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
@@ -88,6 +97,9 @@
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.0.0",
     "typescript": "^4.3.5"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --fix"
   },
   "jest": {
     "moduleFileExtensions": [

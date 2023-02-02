@@ -1,65 +1,106 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare, genSalt, hash } from 'bcrypt';
+import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'modules/user/entity/user.entity';
-import { Repository } from 'typeorm';
+import { ILoginRes } from 'modules/auth/interfaces/login-res.interface';
+import { TokenPayload } from 'modules/auth/interfaces/token-payload.interface';
+import { RegisterDto } from 'modules/auth/dto/register.dto';
+import { EMAIL_IS_USE, WRONG_EMAIL_OR_PASSWORD } from './auth.constants';
 import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private userRpository: Repository<User>,
     private readonly jwtService: JwtService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  async register(registerDto: RegisterDto) {
-    const { email, password } = registerDto;
-    const user = await this.userRpository
-      .createQueryBuilder('user')
-      .where('user.email = :email', { email })
-      .getOne();
+  async register(registerDto: RegisterDto): Promise<User> {
+    try {
+      const { name, email, password } = registerDto;
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.email = :email', { email })
+        .getOne();
 
-    if (user) {
-      throw new UnauthorizedException('Email is already in use');
+      if (user && user.password) {
+        throw new UnauthorizedException(EMAIL_IS_USE);
+      }
+
+      const salt = await genSalt(+process.env.SALT_VALUE);
+      const newPassword = await hash(password, salt);
+
+      if (user && !user.password) {
+        const updateUser = await this.userRepository
+          .createQueryBuilder()
+          .update(User)
+          .set({
+            name,
+            password: newPassword,
+          })
+          .where('id = :id', { id: user.id })
+          .execute();
+
+        return updateUser.raw[0];
+      }
+
+      return this.userRepository.save({
+        name,
+        email,
+        password: newPassword,
+      });
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
 
-    const salt = await genSalt(10);
-    const newUser = new User();
-    newUser.email = email;
-    newUser.password = await hash(password, salt);
+  async login(user: User): Promise<ILoginRes> {
+    try {
+      const tokenPayload: TokenPayload = {
+        email: user.email,
+        id: user.id,
+        name: user.name,
+      };
 
-    return this.userRpository.save(newUser);
+      return {
+        tokenPayload,
+        accessToken: this.jwtService.sign(tokenPayload),
+      };
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async validateUser(loginDto: LoginDto): Promise<User> {
-    const { email, password } = loginDto;
-    const user = await this.userRpository
-      .createQueryBuilder('user')
-      .where('user.email = :email', { email })
-      .getOne();
+    try {
+      const { email, password } = loginDto;
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.email = :email', { email })
+        .andWhere('user.password IS NOT NULL')
+        .getOne();
 
-    if (!user) {
-      throw new UnauthorizedException('User not found or wrong password');
+      if (!user) {
+        throw new UnauthorizedException(WRONG_EMAIL_OR_PASSWORD);
+      }
+
+      const isCorrectPassword = await compare(password, user.password);
+
+      if (!isCorrectPassword) {
+        throw new UnauthorizedException(WRONG_EMAIL_OR_PASSWORD);
+      }
+
+      return user;
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    const isCorrectPassword = await compare(password, user.password);
-
-    if (!isCorrectPassword) {
-      throw new UnauthorizedException('Wrong Password');
-    }
-
-    return user;
-  }
-
-  async login(user: User) {
-    const payload = { email: user.email };
-
-    return {
-      payload,
-      access_token: this.jwtService.sign(payload),
-    };
   }
 }

@@ -3,6 +3,12 @@ import { IsEmail, IsString } from 'class-validator';
 
 export class RegisterDto {
   @ApiProperty({
+    description: 'Name',
+  })
+  @IsString()
+  name: string;
+
+  @ApiProperty({
     description: 'Work Email',
   })
   @IsEmail()

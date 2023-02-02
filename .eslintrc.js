@@ -2,15 +2,15 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
-    tsconfigRootDir : __dirname, 
+    tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin',],
+  plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
     'airbnb-base',
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
@@ -18,7 +18,7 @@ module.exports = {
   env: {
     node: true,
     jest: true,
-    es6: true
+    es6: true,
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
@@ -26,21 +26,35 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
+    'no-shadow': 'off',
+    'import/no-cycle': 'off',
     'no-useless-constructor': 'off',
     'class-methods-use-this': 'off',
     'import/namespace': 'off',
+    'no-restricted-syntax': 'off',
+    'dot-notation': 'off',
     'linebreak-style': 0,
     'global-require': 0,
     'eslint linebreak-style': [0, 'error', 'windows'],
     'import/extensions': 0,
     'import/prefer-default-export': 'off',
-    "prettier/prettier": ["error",{
-      "endOfLine": "auto"}
-    ]
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: true,
+      },
+    ],
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
   settings: {
-    "import/resolver": {
-      "typescript": {}
+    'import/resolver': {
+      typescript: {},
     },
   },
 };
